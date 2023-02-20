@@ -1,3 +1,13 @@
 html {
     overflow-x: hidden;
 }
+
+
+.quiz-answers button, input, optgroup, select, textarea {
+    margin: 20px 0px;
+    padding: 20px;
+    border-radius: 40px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
