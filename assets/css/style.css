@@ -3,7 +3,7 @@ html {
 }
 
 
-.quiz-answers button, input, optgroup, select, textarea {
+.quiz-answers button {
     margin: 20px 0px;
     padding: 20px;
     border-radius: 40px;
@@ -11,3 +11,6 @@ html {
     word-break: break-all;
 }
 
+#feedback {
+    position: absolute;
+}
