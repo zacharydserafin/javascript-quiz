@@ -10,13 +10,13 @@ var startButton = document.getElementById("start-button");
 var timer;
 var timerCount = 75;
 var score = 0
+ 
 
 var q1 = {
     question: "What is two plus two?",
     correct: "Four",
     incorrect: ["Three", "Five", "Six"],
 }
-
 var q2 = {
     question: "What is two minus one?",
     correct: "One",
@@ -32,11 +32,17 @@ var q4 = {
     correct: "Five",
     incorrect: ["Four", "Six", "Seven"],
 }
+var q5 = {
+    question: "What is twelve plus two?",
+    correct: "Fourteen",
+    incorrect: ["Eleven", "Six", "Seven"],
+}
 
-var questions = [q1, q2, q3, q4];
+var questions = [q1, q2, q3, q4, q5];
 var shuffledQuestions = shuffleArray(questions);
 var i = 0;
 var selectedQuestion = shuffledQuestions[i++];
+var highScore = questions.length * 10;
 
 
 function startQuiz() {
@@ -50,10 +56,10 @@ function startTimer() {
     timer = setInterval(function() {
         timerCount--;
         timerElement.textContent = timerCount;
-        // Add conditional logic to detect end of quiz
-        if (timerCount === 0) {
+        if (timerCount <= 0) {
             clearInterval(timer);
-            // Add end of game function here
+            quizElement.replaceChildren();
+            endGame();
         }
     }, 1000)
 }
@@ -67,39 +73,35 @@ function shuffleArray(array) {
   }
   
 function renderQuestion(selection) {
-    if (i > shuffledQuestions.length || timerCount === 0) {
-    // insert endgame function
-    } else {
-        var answers = [...selection.incorrect, selection.correct];
-        var shuffledAnswers = shuffleArray(answers);
-        
-        var quizQuestion = document.createElement("h3");
-        var quizAnswers = document.createElement("ul");
-        var a1 = document.createElement("button");
-        var a2 = document.createElement("button");
-        var a3 = document.createElement("button");
-        var a4 = document.createElement("button");
+    var answers = [...selection.incorrect, selection.correct];
+    var shuffledAnswers = shuffleArray(answers);
+    
+    var quizQuestion = document.createElement("h3");
+    var quizAnswers = document.createElement("ul");
+    var a1 = document.createElement("button");
+    var a2 = document.createElement("button");
+    var a3 = document.createElement("button");
+    var a4 = document.createElement("button");
 
-        quizQuestion.textContent = selection.question;
-        a1.textContent = shuffledAnswers[0];
-        a2.textContent = shuffledAnswers[1];
-        a3.textContent = shuffledAnswers[2];
-        a4.textContent = shuffledAnswers[3];
+    quizQuestion.textContent = selection.question;
+    a1.textContent = shuffledAnswers[0];
+    a2.textContent = shuffledAnswers[1];
+    a3.textContent = shuffledAnswers[2];
+    a4.textContent = shuffledAnswers[3];
 
-        quizElement.appendChild(quizQuestion);
-        quizElement.appendChild(quizAnswers);
-        quizAnswers.appendChild(a1);
-        quizAnswers.appendChild(a2);
-        quizAnswers.appendChild(a3);
-        quizAnswers.appendChild(a4);
-        
-        quizQuestion.classList.add("mt-5", "col-12");
-        quizAnswers.classList.add("quiz-answers");
-        a1.classList.add("col-12");
-        a2.classList.add("col-12");
-        a3.classList.add("col-12");
-        a4.classList.add("col-12");
-    }
+    quizElement.appendChild(quizQuestion);
+    quizElement.appendChild(quizAnswers);
+    quizAnswers.appendChild(a1);
+    quizAnswers.appendChild(a2);
+    quizAnswers.appendChild(a3);
+    quizAnswers.appendChild(a4);
+    
+    quizQuestion.classList.add("mt-5", "col-12");
+    quizAnswers.classList.add("quiz-answers");
+    a1.classList.add("col-12");
+    a2.classList.add("col-12");
+    a3.classList.add("col-12");
+    a4.classList.add("col-12");
 }
 
 function answerSelection(event) {
@@ -145,7 +147,7 @@ function answerSelection(event) {
 }
 
 function nextQuestion() {
-    if (i >= shuffledQuestions.length) {
+    if (i >= shuffledQuestions.length || timerCount <= 0) {
         quizElement.replaceChildren();
         endGame();
     } else {
@@ -157,7 +159,15 @@ function nextQuestion() {
 
 function endGame() {
     clearInterval(timer);
+    timerElement.textContent = timerCount;
+
+    if (score >= highScore * 0.8) {
     score = score + timerCount;
+    }
+
+    if (timerCount < 0) {
+        timerElement.textContent = 0;
+    }
 
     var gameOver = document.createElement("h3");
     var scoreTeller = document.createElement("p");
@@ -172,7 +182,7 @@ function endGame() {
     scoreForm.appendChild(scoreButton);
 
     gameOver.textContent = "Quiz Complete!";
-    scoreTeller.textContent = "Congrats! Your score was " + score + ".";
+    scoreTeller.textContent = "Your score was " + score + ".";
     scoreInput.setAttribute("placeholder", "Put your initials here!");
     scoreInput.setAttribute("name", "initials");
     scoreButton.setAttribute("type", "submit");
