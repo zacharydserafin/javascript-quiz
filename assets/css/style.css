@@ -1,16 +1,22 @@
 html {
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
-
 .quiz-answers button {
-    margin: 20px 0px;
+    margin: 10px 0px;
     padding: 20px;
     border-radius: 40px;
     word-wrap: break-word;
     word-break: break-all;
 }
 
-#feedback {
-    position: absolute;
+.main-container {
+    position: relative;
+}
+
+#feedback h2 {
+    position: fixed;
+    left: 20;
+    
 }
